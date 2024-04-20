@@ -79,8 +79,8 @@ class HospitalControllerTest {
     void addNewDoctor() throws Exception {
         Specialty medGen = new Specialty("Medicina General");
         specialtyRepository.save(medGen);
-        Doctor fixture2 = new Doctor("Joan Permanyer", new Address("Calle Balmes", "Valencia", 7324), 56736, "email", medGen);
-        String body = objectMapper.writeValueAsString(fixture2);
+        Doctor fixture = new Doctor("Joan Permanyer", new Address("Calle Balmes", "Valencia", 7324), 56736, "email", medGen);
+        String body = objectMapper.writeValueAsString(fixture);
 
         MvcResult result = mockMvc.perform(post("/doctor")
                         .content(body)
@@ -95,5 +95,25 @@ class HospitalControllerTest {
         );
 
         assertEquals("Joan Permanyer", doctor.getFullName());
+    }
+
+    @Test
+    void addNewSpecialty() throws Exception {
+        Specialty fixture = new Specialty("Medicina General");
+        String body = objectMapper.writeValueAsString(fixture);
+
+        MvcResult result = mockMvc.perform(post("/specialty")
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Specialty specialty = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                Specialty.class
+        );
+
+        assertEquals("Medicina General", specialty.getName());
     }
 }
