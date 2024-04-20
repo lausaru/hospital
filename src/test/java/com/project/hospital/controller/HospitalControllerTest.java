@@ -1,10 +1,10 @@
 package com.project.hospital.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.hospital.model.Address;
-import com.project.hospital.model.BloodType;
-import com.project.hospital.model.Patient;
+import com.project.hospital.model.*;
+import com.project.hospital.repository.DoctorRepository;
 import com.project.hospital.repository.PatientRepository;
+import com.project.hospital.repository.SpecialtyRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.print.Doc;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +28,10 @@ class HospitalControllerTest {
     WebApplicationContext webApplicationContext;
     @Autowired
     PatientRepository patientRepository;
+    @Autowired
+    DoctorRepository doctorRepository;
+    @Autowired
+    SpecialtyRepository specialtyRepository;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -36,6 +42,12 @@ class HospitalControllerTest {
         Address judithAddress = new Address("Calle Marina", "Barcelona", 5432);
         Patient patient = new Patient("Judith Peregrina", judithAddress, 452, "email", BloodType.A);
         patientRepository.save(patient);
+
+        Address joanAddress = new Address("Calle Balmes", "Valencia", 7324);
+        Specialty medGen = new Specialty("Medicina General");
+        specialtyRepository.save(medGen);
+        Doctor doctor = new Doctor("Joan Permanyer", joanAddress, 56736, "email", medGen);
+        doctorRepository.save(doctor);
     }
 
     @AfterEach
@@ -61,5 +73,27 @@ class HospitalControllerTest {
         );
 
         assertEquals("Judith Peregrina", patient.getFullName());
+    }
+
+    @Test
+    void addNewDoctor() throws Exception {
+        Specialty medGen = new Specialty("Medicina General");
+        specialtyRepository.save(medGen);
+        Doctor fixture2 = new Doctor("Joan Permanyer", new Address("Calle Balmes", "Valencia", 7324), 56736, "email", medGen);
+        String body = objectMapper.writeValueAsString(fixture2);
+
+        MvcResult result = mockMvc.perform(post("/doctor")
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Doctor doctor = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                Doctor.class
+        );
+
+        assertEquals("Joan Permanyer", doctor.getFullName());
     }
 }
