@@ -1,9 +1,11 @@
 package com.project.hospital.controller;
 
 import com.project.hospital.model.Doctor;
+import com.project.hospital.model.Medicine;
 import com.project.hospital.model.Patient;
 import com.project.hospital.model.Specialty;
 import com.project.hospital.repository.DoctorRepository;
+import com.project.hospital.repository.MedicineRepository;
 import com.project.hospital.repository.PatientRepository;
 import com.project.hospital.repository.SpecialtyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class HospitalController {
     @Autowired
     private SpecialtyRepository specialtyRepository;
 
+    @Autowired
+    private MedicineRepository medicineRepository;
+
     @PostMapping("/patient")
     public Patient addNewPatient(@RequestBody Patient patient) {
         return patientRepository.save(patient);
@@ -39,6 +44,11 @@ public class HospitalController {
     @PostMapping("/specialty")
     public Specialty addNewSpecialty(@RequestBody Specialty specialty) {
         return specialtyRepository.save(specialty);
+    }
+
+    @PostMapping("/medicine")
+    public Medicine addNewMedicine(@RequestBody Medicine medicine) {
+        return medicineRepository.save(medicine);
     }
 
 }
