@@ -3,6 +3,7 @@ package com.project.hospital.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.hospital.model.*;
 import com.project.hospital.repository.DoctorRepository;
+import com.project.hospital.repository.MedicineRepository;
 import com.project.hospital.repository.PatientRepository;
 import com.project.hospital.repository.SpecialtyRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -32,6 +33,9 @@ class HospitalControllerTest {
     DoctorRepository doctorRepository;
     @Autowired
     SpecialtyRepository specialtyRepository;
+
+    @Autowired
+    MedicineRepository medicineRepository;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -115,5 +119,25 @@ class HospitalControllerTest {
         );
 
         assertEquals("Medicina General", specialty.getName());
+    }
+
+    @Test
+    void addNewMedicine() throws Exception {
+        Medicine fixture = new Medicine("Ibuprofeno");
+        String body = objectMapper.writeValueAsString(fixture);
+
+        MvcResult result = mockMvc.perform(post("/medicine")
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Medicine medicine = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                Medicine.class
+        );
+
+        assertEquals("Ibuprofeno", medicine.getName());
     }
 }

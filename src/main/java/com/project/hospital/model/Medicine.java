@@ -18,6 +18,6 @@ public class Medicine {
     private String name;
 
     public Medicine(String name) {
-        this.name = name;
+        setName(name);
     }
 }
