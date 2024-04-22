@@ -15,7 +15,7 @@ public class Doctor extends Data {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @OneToOne
-    @JoinColumn(name = "specialty_id",referencedColumnName = "id")
+    @JoinColumn(name = "specialty_code",referencedColumnName = "code")
     private Specialty specialty;
 
     public Doctor(String fullName, Address address, int phone, String email, Specialty specialty) {
