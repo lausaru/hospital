@@ -13,8 +13,7 @@ import java.util.List;
 public class Patient extends Data {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
     @Enumerated(EnumType.STRING)
     private BloodType bloodType;
     //@OneToMany
