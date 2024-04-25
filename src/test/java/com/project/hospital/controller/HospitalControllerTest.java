@@ -49,6 +49,7 @@ class HospitalControllerTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         Address judithAddress = new Address("Calle Marina", "Barcelona", 5432);
         Patient patient = new Patient("Judith Peregrina", judithAddress, 452, "email", BloodType.A);
+        patient.setId(Utils.generatePatientId(patient.getFullName(),patientRepository));
         patientRepository.save(patient);
 
 //        Address joanAddress = new Address("Calle Balmes", "Valencia", 7324);
@@ -71,6 +72,7 @@ class HospitalControllerTest {
     @Test
     void addNewPatient() throws Exception {
         Patient fixture = new Patient("Judith Peregrina", new Address("Calle Marina", "Barcelona", 5432), 452, "email", BloodType.A);
+        fixture.setId(Utils.generatePatientId(fixture.getFullName(),patientRepository));
         String body = objectMapper.writeValueAsString(fixture);
 
         MvcResult result = mockMvc.perform(post("/patient")
@@ -96,6 +98,7 @@ class HospitalControllerTest {
         specialtyRepository.save(medGen);
 
         Doctor fixture = new Doctor("Joan Permanyer", new Address("Calle Balmes", "Valencia", 7324), 56736, "email", medGen);
+        fixture.setId(Utils.generateDoctorId(fixture.getFullName(),doctorRepository));
         String body = objectMapper.writeValueAsString(fixture);
 
         MvcResult result = mockMvc.perform(post("/doctor")
