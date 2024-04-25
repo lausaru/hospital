@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SpecialtyRepository extends JpaRepository<Specialty,Integer> {
+public interface SpecialtyRepository extends JpaRepository<Specialty,String> {
     Optional<Specialty> findByCode(String code);
     List<Specialty> findByCodeStartingWith(String initials);
 }
