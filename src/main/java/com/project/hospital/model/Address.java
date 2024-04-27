@@ -12,5 +12,5 @@ import lombok.*;
 public class Address {
     private String streetAddress;
     private String city;
-    private int postalCode;
+    private String postalCode;
 }

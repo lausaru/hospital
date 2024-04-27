@@ -71,8 +71,8 @@ class UtilsTest {
         String id1 = Utils.generatePatientId(patientFullName1,patientRepository);
         assertEquals("AGP1",id1);
 
-        Address address = new Address("Calle Marina", "Barcelona", 5432);
-        Patient patient1 = new Patient(patientFullName1,address,654,"email", BloodType.B);
+        Address address = new Address("Calle Marina", "Barcelona", "08291");
+        Patient patient1 = new Patient(patientFullName1,address,"788548831","email", BloodType.B);
         patient1.setId(id1);
         patientRepository.save(patient1);
 
@@ -81,4 +81,51 @@ class UtilsTest {
         assertEquals("AGP2",id2);
     }
 
+    @Test
+    void isValidEmail_Valid() {
+        assertTrue(Utils.isValidEmail("sf@mail.com"));
+
+        assertTrue(Utils.isValidEmail("sf@mail.uk"));
+
+        assertTrue(Utils.isValidEmail("sf@ma.com"));
+
+        assertTrue(Utils.isValidEmail("sf_@mail.com"));
+
+        assertTrue(Utils.isValidEmail("sf_9@mail.com"));
+    }
+
+    @Test
+    void isValidEmail_Invalids() {
+        assertFalse(Utils.isValidEmail("__4@mail.com"));
+
+        assertFalse(Utils.isValidEmail("4dxf@mail.com"));
+
+        assertFalse(Utils.isValidEmail("laurasr@mail.c"));
+
+        assertFalse(Utils.isValidEmail("laurasr@ma,l.com"));
+    }
+
+    @Test
+    void isValidSpanishPostalCode_Valid() {
+        assertTrue(Utils.isValidPostalCode("08291"));
+    }
+
+    @Test
+    void isValidSpanishPostalCode_Invalids() {
+        assertFalse(Utils.isValidPostalCode("57109"));
+        assertFalse(Utils.isValidPostalCode("0829108291"));
+        assertFalse(Utils.isValidPostalCode("4623"));
+    }
+
+    @Test
+    void isValidSpanishPhoneNumber_Valid() {
+        assertTrue(Utils.isValidSpanishPhoneNumber("677593741"));
+        assertTrue(Utils.isValidSpanishPhoneNumber("777593741"));
+        assertTrue(Utils.isValidSpanishPhoneNumber("935816352"));
+    }
+
+    @Test
+    void isValidSpanishPhoneNumber_Invalids() {
+        assertFalse(Utils.isValidSpanishPhoneNumber("6234"));
+    }
 }

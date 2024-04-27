@@ -17,7 +17,7 @@ public class Doctor extends Data {
     @JoinColumn(name = "specialty_code",referencedColumnName = "code")
     private Specialty specialty;
 
-    public Doctor(String fullName, Address address, int phone, String email, Specialty specialty) {
+    public Doctor(String fullName, Address address, String phone, String email, Specialty specialty) {
         super(fullName, address, phone, email);
         setSpecialty(specialty);
     }

@@ -20,7 +20,7 @@ public class Patient extends Data {
     //private List<Appointment> appointments;
 
 
-    public Patient(String fullName, Address address, int phone, String email, BloodType bloodType) {
+    public Patient(String fullName, Address address, String phone, String email, BloodType bloodType) {
         super(fullName, address, phone, email);
         setBloodType(bloodType);
     }
