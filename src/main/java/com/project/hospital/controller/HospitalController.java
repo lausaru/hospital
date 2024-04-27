@@ -32,8 +32,14 @@ public class HospitalController {
     private MedicineRepository medicineRepository;
 
     @PostMapping("/patient")
-    public Patient addNewPatient(@RequestBody Patient patient) {
-        return patientRepository.save(patient);
+    public ResponseEntity<String> addNewPatient(@RequestBody Patient patient) {
+        String id = Utils.generatePatientId(patient.getFullName(),patientRepository);
+        patient.setId(id);
+
+        // Save patient in repository and return message
+        patientRepository.save(patient);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Patient " + patient.getFullName() + " added with id " + id);
     }
 
     @PostMapping("/doctor")
@@ -49,7 +55,7 @@ public class HospitalController {
         // Save specialty in repository and return message
         specialtyRepository.save(specialty);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Specialty " + specialty.getName() + " added with code: " + code);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Specialty " + specialty.getName() + " added with code " + code);
     }
 
     @PostMapping("/medicine")
