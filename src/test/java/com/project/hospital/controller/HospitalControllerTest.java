@@ -95,20 +95,15 @@ class HospitalControllerTest {
         Doctor fixture = new Doctor("Joan Permanyer", new Address("Calle Balmes", "Valencia", 7324), 56736, "email", medGen);
         fixture.setId(Utils.generateDoctorId(fixture.getFullName(),doctorRepository));
         String body = objectMapper.writeValueAsString(fixture);
+        String expectedOutput = "Doctor " + fixture.getFullName() + " added with id " + fixture.getId();
 
         MvcResult result = mockMvc.perform(post("/doctor")
                         .content(body)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
+                .andExpect(content().string(expectedOutput))
                 .andReturn();
-
-        Doctor doctor = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                Doctor.class
-        );
-
-        assertEquals("Joan Permanyer", doctor.getFullName());
     }
 
     @Test
