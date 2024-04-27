@@ -47,12 +47,12 @@ class HospitalControllerTest {
     @BeforeEach
     void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-        Address judithAddress = new Address("Calle Marina", "Barcelona", 5432);
-        Patient patient = new Patient("Judith Peregrina", judithAddress, 452, "email", BloodType.A);
+        Address judithAddress = new Address("Calle Marina", "Barcelona", "08291");
+        Patient patient = new Patient("Judith Peregrina", judithAddress, "699358321", "email", BloodType.A);
         patient.setId(Utils.generatePatientId(patient.getFullName(),patientRepository));
         patientRepository.save(patient);
 
-//        Address joanAddress = new Address("Calle Balmes", "Valencia", 7324);
+//        Address joanAddress = new Address("Calle Balmes", "Valencia", "08291");
 //        String specialtyName = "Medicina General";
 //        String specialtyCode = Utils.generateSpecialtyCode(specialtyName,specialtyRepository);
 //        Specialty medGen = new Specialty(specialtyCode,specialtyName);
@@ -71,7 +71,7 @@ class HospitalControllerTest {
 
     @Test
     void addNewPatient() throws Exception {
-        Patient fixture = new Patient("Judith Peregrina", new Address("Calle Marina", "Barcelona", 5432), 452, "email", BloodType.A);
+        Patient fixture = new Patient("Judith Peregrina", new Address("Calle Marina", "Barcelona", "08291"), "699358321", "email@test.com", BloodType.A);
         fixture.setId(Utils.generatePatientId(fixture.getFullName(),patientRepository));
         String body = objectMapper.writeValueAsString(fixture);
         String expectedOutput = "Patient " + fixture.getFullName() + " added with id " + fixture.getId();
@@ -92,7 +92,7 @@ class HospitalControllerTest {
         Specialty medGen = new Specialty(specialtyCode,specialtyName);
         specialtyRepository.save(medGen);
 
-        Doctor fixture = new Doctor("Joan Permanyer", new Address("Calle Balmes", "Valencia", 7324), 56736, "email", medGen);
+        Doctor fixture = new Doctor("Joan Permanyer", new Address("Calle Balmes", "Valencia", "08291"), "699358321", "email@test.com", medGen);
         fixture.setId(Utils.generateDoctorId(fixture.getFullName(),doctorRepository));
         String body = objectMapper.writeValueAsString(fixture);
 

@@ -1,5 +1,6 @@
 package com.project.hospital.model;
 
+import com.project.hospital.Utils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class Data {
     private String fullName;
     @Embedded
     private Address address;
-    private int phone;
+    private String phone;
     private String email;
 
     public void setFullName(String fullName) {
@@ -26,6 +27,22 @@ public class Data {
             this.fullName = trimmedFullName;
         } else {
             throw new IllegalArgumentException("The full name should be composed in between 2 and 5 words.");
+        }
+    }
+
+    public void setPhone(String phone) {
+        if (Utils.isValidSpanishPhoneNumber(phone)) {
+            this.phone = phone;
+        } else {
+            throw new IllegalArgumentException("Invalid phone number.");
+        }
+    }
+
+    public void setEmail(String email) {
+        if (Utils.isValidEmail(email)) {
+            this.email = email;
+        } else {
+            throw new IllegalArgumentException("Invalid email.");
         }
     }
 }

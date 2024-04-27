@@ -26,18 +26,18 @@ class ModelTest {
 
     @BeforeEach
     void setUp() {
-        Address judithAddress = new Address("Calle Marina", "Barcelona", 5432);
-        Patient patient = new Patient("Judith Peregrina", judithAddress, 452, "email", BloodType.A);
+        Address judithAddress = new Address("Calle Marina", "Barcelona", "08291");
+        Patient patient = new Patient("Judith Peregrina", judithAddress, "699358321", "email", BloodType.A);
         patient.setId(Utils.generatePatientId(patient.getFullName(),patientRepository));
         patientRepository.save(patient);
 
-        Address joanAddress = new Address("Calle Balmes", "Valencia", 7324);
+        Address joanAddress = new Address("Calle Balmes", "Valencia", "08291");
         String specialtyName = "Medicina General";
         String specialtyCode = Utils.generateSpecialtyCode(specialtyName,specialtyRepository);
         Specialty medGen = new Specialty(specialtyCode,specialtyName);
         specialtyRepository.save(medGen);
 
-        Doctor doctor = new Doctor("Joan Permanyer", joanAddress, 56736, "email", medGen);
+        Doctor doctor = new Doctor("Joan Permanyer", joanAddress, "699358321", "email", medGen);
         doctor.setId(Utils.generateDoctorId(doctor.getFullName(),doctorRepository));
         doctorRepository.save(doctor);
     }
