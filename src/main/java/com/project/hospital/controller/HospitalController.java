@@ -9,6 +9,7 @@ import com.project.hospital.repository.DoctorRepository;
 import com.project.hospital.repository.MedicineRepository;
 import com.project.hospital.repository.PatientRepository;
 import com.project.hospital.repository.SpecialtyRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.print.Doc;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class HospitalController {
@@ -65,8 +67,18 @@ public class HospitalController {
     }
 
     @PostMapping("/medicine")
-    public Medicine addNewMedicine(@RequestBody Medicine medicine) {
-        return medicineRepository.save(medicine);
+    public ResponseEntity<String> addNewMedicine(@RequestBody String medicineName) {
+        Optional<Medicine> medicineOptional = medicineRepository.findByName(medicineName);
+        if (medicineOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Medicine with name " + medicineOptional.get().getName() + " already exists (with id " + medicineOptional.get().getId() + ").");
+        } else {
+            Medicine medicine = new Medicine(medicineName);
+
+            // Save medicine in repository and return message
+            medicineRepository.save(medicine);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("Medicine " + medicine.getName() + " added with id " + medicine.getId());
+        }
     }
 
 }

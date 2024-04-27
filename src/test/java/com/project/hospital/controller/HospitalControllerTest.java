@@ -67,6 +67,7 @@ class HospitalControllerTest {
         patientRepository.deleteAll();
         doctorRepository.deleteAll();
         specialtyRepository.deleteAll();
+        medicineRepository.deleteAll();
     }
 
     @Test
@@ -125,21 +126,36 @@ class HospitalControllerTest {
 
     @Test
     void addNewMedicine() throws Exception {
-        Medicine fixture = new Medicine("Ibuprofeno");
+        String medicineName = "Ibuprofeno";
+        Medicine fixture = new Medicine(medicineName);
         String body = objectMapper.writeValueAsString(fixture);
 
         MvcResult result = mockMvc.perform(post("/medicine")
-                        .content(body)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(medicineName)
+                        .contentType(MediaType.TEXT_PLAIN)
                 )
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
-        Medicine medicine = objectMapper.readValue(
-                result.getResponse().getContentAsString(),
-                Medicine.class
-        );
+        String responseBody = result.getResponse().getContentAsString();
+        assertTrue(responseBody.contains("Medicine " + fixture.getName() + " added with id "));
+    }
 
-        assertEquals("Ibuprofeno", medicine.getName());
+    @Test
+    void addNewMedicineAlreadyExisting() throws Exception {
+        String medicineName = "Ibuprofeno";
+        Medicine fixture = new Medicine(medicineName);
+        medicineRepository.save(fixture);
+
+        String body = objectMapper.writeValueAsString(fixture);
+        String expectedOutput = "Medicine with name " + fixture.getName() + " already exists (with id " + fixture.getId() + ").";
+
+        MvcResult result = mockMvc.perform(post("/medicine")
+                        .content(medicineName)
+                        .contentType(MediaType.TEXT_PLAIN)
+                )
+                .andExpect(status().isConflict())
+                .andExpect(content().string(expectedOutput))
+                .andReturn();
     }
 }
