@@ -79,7 +79,11 @@ public class SecurityConfig {
         // set up authorization for different request matchers and user roles
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/api/login/**").permitAll()
+                .requestMatchers("/v3/api-docs").permitAll()
+                .requestMatchers("/swagger-ui/index.html").permitAll()
+
                 .requestMatchers(GET, "/api/users").hasAnyAuthority("ROLE_ADMIN")
+
                 .requestMatchers(POST, "/patient").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers(POST, "/doctor").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers(POST, "/specialty").hasAnyAuthority("ROLE_ADMIN")
