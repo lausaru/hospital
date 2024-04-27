@@ -43,8 +43,14 @@ public class HospitalController {
     }
 
     @PostMapping("/doctor")
-    public Doctor addNewDoctor(@RequestBody Doctor doctor) {
-        return doctorRepository.save(doctor);
+    public ResponseEntity<String> addNewDoctor(@RequestBody Doctor doctor) {
+        String id = Utils.generateDoctorId(doctor.getFullName(),doctorRepository);
+        doctor.setId(id);
+
+        // Save doctor in repository and return message
+        doctorRepository.save(doctor);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Doctor " + doctor.getFullName() + " added with id " + id);
     }
 
     @PostMapping("/specialty")
