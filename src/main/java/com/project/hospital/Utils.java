@@ -67,38 +67,38 @@ public abstract class Utils {
         return initials.toString().toUpperCase();
     }
 
+    // Method to validate regex patterns (for email, phone and postal code)
+    public static boolean patternMatches(String toValidate, String regexPattern) {
+        return Pattern.compile(regexPattern)
+                .matcher(toValidate)
+                .matches();
+    }
+
     // Method to validate email format
     public static boolean isValidEmail(String email) {
         String EMAIL_REGEX =
                 "^(?=.{1,256})([a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9-]+(\\.[a-zA-Z]{2,}){1,})$";
-        Pattern pattern = Pattern.compile(EMAIL_REGEX);
-
         if (email == null) {
             return false;
         }
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
+        return patternMatches(email,EMAIL_REGEX);
     }
 
     // Method to validate Postal Code format (Spain)
     public static boolean isValidPostalCode(String postalCode) {
         String POSTAL_CODE_REGEX = "^(0[1-9]|[1-4]\\d|5[0-2])\\d{3}$";
-        Pattern pattern = Pattern.compile(POSTAL_CODE_REGEX);
-
         if (postalCode == null) {
             return false;
         }
-        return pattern.matcher(postalCode).matches();
+        return patternMatches(postalCode,POSTAL_CODE_REGEX);
     }
 
     // Method to validate Phone numbers format (Spain)
     public static boolean isValidSpanishPhoneNumber(String phoneNumber) {
         String PHONE_REGEX = "^(?:(?:\\+|00)34)?(?:6\\d{8}|7\\d{8}|[89]\\d{8})$";
-        Pattern pattern = Pattern.compile(PHONE_REGEX);
-
         if (phoneNumber == null) {
             return false;
         }
-        return pattern.matcher(phoneNumber).matches();
+        return patternMatches(phoneNumber,PHONE_REGEX);
     }
 }
