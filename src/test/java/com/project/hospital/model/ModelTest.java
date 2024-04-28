@@ -53,11 +53,35 @@ class ModelTest {
         Patient patient = patientRepository.findByFullName("Judith Peregrina").getFirst();
         Doctor doctor = doctorRepository.findByFullName("Joan Permanyer").getFirst();
 
+        // fullName only accepts letters and spaces
+        assertThrows(IllegalArgumentException.class, () -> {
+            try {
+                patient.setFullName("Judith Laredo2");
+            } catch (IllegalArgumentException e) {
+                assertEquals("The full name should only contain letters.", e.getMessage());
+                throw e;
+            }
+        });
+
         // fullName requires a minimum of 2 words (name and surname)
-        assertThrows(IllegalArgumentException.class, () -> patient.setFullName("Judith"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            try {
+                patient.setFullName("Judith");
+            } catch (IllegalArgumentException e) {
+                assertEquals("The full name should be composed in between 2 and 5 words.", e.getMessage());
+                throw e;
+            }
+        });
 
         // fullName accepts a maximum of 5 words
-        assertThrows(IllegalArgumentException.class, () -> doctor.setFullName("Joan Joan Permanyer Permanyer Peregrina Lopez"));
+        assertThrows(IllegalArgumentException.class, () -> {
+            try {
+                doctor.setFullName("Joan Joan Permanyer Permanyer Peregrina Lopez");
+            } catch (IllegalArgumentException e) {
+                assertEquals("The full name should be composed in between 2 and 5 words.", e.getMessage());
+                throw e;
+            }
+        });
     }
 
     @Test

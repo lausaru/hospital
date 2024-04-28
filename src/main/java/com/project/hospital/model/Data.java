@@ -26,6 +26,11 @@ public class Data {
     }
 
     public void setFullName(String fullName) {
+        // Verify that fullName only contains letters and spacings
+        if (!fullName.matches("^[a-zA-Z\\s]+$")) {
+            throw new IllegalArgumentException("The full name should only contain letters.");
+        }
+
         String[] words = fullName.split("\\s+");
         if (words.length >= 2 && words.length <= 5) {
             this.fullName = fullName.replaceAll("\\s+", " ");
