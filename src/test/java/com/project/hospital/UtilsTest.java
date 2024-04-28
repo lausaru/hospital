@@ -96,36 +96,43 @@ class UtilsTest {
 
     @Test
     void isValidEmail_Invalids() {
-        assertFalse(Utils.isValidEmail("__4@mail.com"));
-
-        assertFalse(Utils.isValidEmail("4dxf@mail.com"));
-
-        assertFalse(Utils.isValidEmail("laurasr@mail.c"));
-
-        assertFalse(Utils.isValidEmail("laurasr@ma,l.com"));
+        assertFalse(Utils.isValidEmail("__4@mail.com")); // Email must begin with a letter
+        assertFalse(Utils.isValidEmail("4dxf@mail.com")); // Email must begin with a letter
+        assertFalse(Utils.isValidEmail("laurasr@mail.c")); // Email must have at least two letters after the .
+        assertFalse(Utils.isValidEmail("laurasr@ma,l.com")); // Email must be only composed of letters after the @ and before the .
     }
 
     @Test
     void isValidSpanishPostalCode_Valid() {
+        // Postal Code must contain 5 digits
         assertTrue(Utils.isValidPostalCode("08291"));
+        assertTrue(Utils.isValidPostalCode("25001"));
     }
 
     @Test
     void isValidSpanishPostalCode_Invalids() {
+        // Postal Code must contain 5 digits (and only digits)
         assertFalse(Utils.isValidPostalCode("57109"));
         assertFalse(Utils.isValidPostalCode("0829108291"));
         assertFalse(Utils.isValidPostalCode("4623"));
+        assertFalse(Utils.isValidPostalCode("08l91"));
+        assertFalse(Utils.isValidPostalCode("08291l"));
     }
 
     @Test
     void isValidSpanishPhoneNumber_Valid() {
+        // Phone number must contain 9 digits, start with 6, 7 or 9 or +34 and contain only numbers (not spacings)
         assertTrue(Utils.isValidSpanishPhoneNumber("677593741"));
         assertTrue(Utils.isValidSpanishPhoneNumber("777593741"));
         assertTrue(Utils.isValidSpanishPhoneNumber("935816352"));
+        assertTrue(Utils.isValidSpanishPhoneNumber("+34677854692"));
     }
 
     @Test
     void isValidSpanishPhoneNumber_Invalids() {
-        assertFalse(Utils.isValidSpanishPhoneNumber("6234"));
+        assertFalse(Utils.isValidSpanishPhoneNumber("6234")); // Phone number must contain 9 digits
+        assertFalse(Utils.isValidSpanishPhoneNumber("688l90520")); // Phone number must contain only numbers
+        assertFalse(Utils.isValidSpanishPhoneNumber("584392471")); // Phone number must start with 6, 7, 8 or 9
+        assertFalse(Utils.isValidSpanishPhoneNumber("677 93 42 84")); // Phone number must not contain spacings
     }
 }
