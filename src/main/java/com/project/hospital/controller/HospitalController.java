@@ -93,6 +93,15 @@ public class HospitalController {
         return ResponseEntity.ok(patients);
     }
 
+    @GetMapping("/patient/{id}")
+    public ResponseEntity<?> getPatientById(@PathVariable(name="id") String id) {
+        Optional<Patient> patientOptional = patientRepository.findById(id);
+        if (!patientOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + id + " not found.");
+        }
+        return ResponseEntity.ok(patientOptional.get());
+    }
+
     @GetMapping("/doctors")
     public ResponseEntity<?> getAllDoctors() {
         List<Doctor> doctors = doctorRepository.findAll();
@@ -100,6 +109,15 @@ public class HospitalController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found.");
         }
         return ResponseEntity.ok(doctors);
+    }
+
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<?> getDoctorById(@PathVariable(name="id") String id) {
+        Optional<Doctor> doctorOptional = doctorRepository.findById(id);
+        if (!doctorOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor with id " + id + " not found.");
+        }
+        return ResponseEntity.ok(doctorOptional.get());
     }
 
     @GetMapping("/specialties")
@@ -111,6 +129,15 @@ public class HospitalController {
         return ResponseEntity.ok(specialties);
     }
 
+    @GetMapping("/specialty/{code}")
+    public ResponseEntity<?> getSpecialtyByCode(@PathVariable(name="code") String code) {
+        Optional<Specialty> specialtyOptional = specialtyRepository.findByCode(code);
+        if (!specialtyOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Specialty with code " + code + " not found.");
+        }
+        return ResponseEntity.ok(specialtyOptional.get());
+    }
+
     @GetMapping("/medicines")
     public ResponseEntity<?> getAllMedicines() {
         List<Medicine> medicines = medicineRepository.findAll();
@@ -118,6 +145,15 @@ public class HospitalController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No medicines found.");
         }
         return ResponseEntity.ok(medicines);
+    }
+
+    @GetMapping("/medicine/{id}")
+    public ResponseEntity<?> getMedicineById(@PathVariable(name="id") int id) {
+        Optional<Medicine> medicineOptional = medicineRepository.findById(id);
+        if (!medicineOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine with id " + id + " not found.");
+        }
+        return ResponseEntity.ok(medicineOptional.get());
     }
 
 }
