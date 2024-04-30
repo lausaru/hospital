@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.parameters.P;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -134,5 +135,15 @@ class UtilsTest {
         assertFalse(Utils.isValidSpanishPhoneNumber("688l90520")); // Phone number must contain only numbers
         assertFalse(Utils.isValidSpanishPhoneNumber("584392471")); // Phone number must start with 6, 7, 8 or 9
         assertFalse(Utils.isValidSpanishPhoneNumber("677 93 42 84")); // Phone number must not contain spacings
+    }
+
+    @Test
+    void generateAppointmentId_patientWithoutAppointments() {
+        Address judithAddress = new Address("Calle Marina", "Barcelona", "08291");
+        Patient patient = new Patient("Judith Peregrina", judithAddress, "699358321", "jp@email.cat", BloodType.A);
+        patient.setId(Utils.generatePatientId(patient.getFullName(),patientRepository));
+        patientRepository.save(patient);
+
+        assertEquals("JP1-1",Utils.generateAppointmentId(patient));
     }
 }

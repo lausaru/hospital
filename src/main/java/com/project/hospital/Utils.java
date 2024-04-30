@@ -55,6 +55,18 @@ public abstract class Utils {
         return id;
     }
 
+    // Method to generate appointments ids
+    public static String generateAppointmentId(Patient patient) {
+        // Obtain the patient's id
+        String patientId = patient.getId();
+
+        // Obtain the number of appointments
+        int numAppointments = patient.getAppointments().size();
+
+        // Generate and set id
+        return patientId + "-" + numAppointments;
+    }
+
     // Method to obtain all the initial letters of each word in a String
     public static String getInitials(String fullString) {
         String[] words = fullString.split("\\s+");

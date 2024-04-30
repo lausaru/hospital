@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -15,6 +17,10 @@ public class Doctor extends Data {
     @OneToOne
     @JoinColumn(name = "specialty_code",referencedColumnName = "code")
     private Specialty specialty;
+//    @OneToMany
+//    private List<Appointment> pendingAppointments;
+//    @OneToMany
+//    private List<Appointment> closedAppointments;
 
     public Doctor(String fullName, Address address, String phone, String email, Specialty specialty) {
         super(fullName, address, phone, email);
