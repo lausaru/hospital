@@ -120,6 +120,21 @@ public class HospitalController {
         return ResponseEntity.ok(doctorOptional.get());
     }
 
+    @GetMapping("/doctors/specialty/{code}")
+    public ResponseEntity<?> getDoctorsBySpecialty(@PathVariable(name="code") String code) {
+        Optional<Specialty> specialtyOptional = specialtyRepository.findByCode(code);
+        if (!specialtyOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Specialty with code " + code + " not found.");
+        }
+
+        List<Doctor> doctors = doctorRepository.findBySpecialty(code);
+        if (doctors.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found with specialty " + specialtyOptional.get().getName() + ".");
+        }
+
+        return ResponseEntity.ok(doctors);
+    }
+
     @GetMapping("/specialties")
     public ResponseEntity<?> getAllSpecialties() {
         List<Specialty> specialties = specialtyRepository.findAll();
