@@ -88,6 +88,17 @@ public class SecurityConfig {
                 .requestMatchers(POST, "/doctor").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers(POST, "/specialty").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers(POST, "/medicine").hasAnyAuthority("ROLE_ADMIN")
+
+                .requestMatchers(GET, "/patients").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/doctors").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/specialties").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/medicines").hasAnyAuthority("ROLE_ADMIN")
+
+                .requestMatchers(GET, "/patient/{id}").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/doctor/{id}").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/doctors/specialty/{code}").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/specialty/{code}").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(GET, "/medicine/{id}").hasAnyAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated());
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);

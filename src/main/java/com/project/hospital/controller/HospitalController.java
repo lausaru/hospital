@@ -14,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.print.Doc;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -79,6 +82,93 @@ public class HospitalController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Medicine " + medicine.getName() + " added with id " + medicine.getId());
         }
+    }
+
+    @GetMapping("/patients")
+    public ResponseEntity<?> getAllPatients() {
+        List<Patient> patients = patientRepository.findAll();
+        if (patients.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No patients found.");
+        }
+        return ResponseEntity.ok(patients);
+    }
+
+    @GetMapping("/patient/{id}")
+    public ResponseEntity<?> getPatientById(@PathVariable(name="id") String id) {
+        Optional<Patient> patientOptional = patientRepository.findById(id);
+        if (!patientOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + id + " not found.");
+        }
+        return ResponseEntity.ok(patientOptional.get());
+    }
+
+    @GetMapping("/doctors")
+    public ResponseEntity<?> getAllDoctors() {
+        List<Doctor> doctors = doctorRepository.findAll();
+        if (doctors.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found.");
+        }
+        return ResponseEntity.ok(doctors);
+    }
+
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<?> getDoctorById(@PathVariable(name="id") String id) {
+        Optional<Doctor> doctorOptional = doctorRepository.findById(id);
+        if (!doctorOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor with id " + id + " not found.");
+        }
+        return ResponseEntity.ok(doctorOptional.get());
+    }
+
+    @GetMapping("/doctors/specialty/{code}")
+    public ResponseEntity<?> getDoctorsBySpecialty(@PathVariable(name="code") String code) {
+        Optional<Specialty> specialtyOptional = specialtyRepository.findByCode(code);
+        if (!specialtyOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Specialty with code " + code + " not found.");
+        }
+
+        List<Doctor> doctors = doctorRepository.findBySpecialty(code);
+        if (doctors.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found with specialty " + specialtyOptional.get().getName() + ".");
+        }
+
+        return ResponseEntity.ok(doctors);
+    }
+
+    @GetMapping("/specialties")
+    public ResponseEntity<?> getAllSpecialties() {
+        List<Specialty> specialties = specialtyRepository.findAll();
+        if (specialties.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No specialties found.");
+        }
+        return ResponseEntity.ok(specialties);
+    }
+
+    @GetMapping("/specialty/{code}")
+    public ResponseEntity<?> getSpecialtyByCode(@PathVariable(name="code") String code) {
+        Optional<Specialty> specialtyOptional = specialtyRepository.findByCode(code);
+        if (!specialtyOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Specialty with code " + code + " not found.");
+        }
+        return ResponseEntity.ok(specialtyOptional.get());
+    }
+
+    @GetMapping("/medicines")
+    public ResponseEntity<?> getAllMedicines() {
+        List<Medicine> medicines = medicineRepository.findAll();
+        if (medicines.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No medicines found.");
+        }
+        return ResponseEntity.ok(medicines);
+    }
+
+    @GetMapping("/medicine/{id}")
+    public ResponseEntity<?> getMedicineById(@PathVariable(name="id") int id) {
+        Optional<Medicine> medicineOptional = medicineRepository.findById(id);
+        if (!medicineOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine with id " + id + " not found.");
+        }
+        return ResponseEntity.ok(medicineOptional.get());
     }
 
 }
