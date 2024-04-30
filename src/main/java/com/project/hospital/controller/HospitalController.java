@@ -14,9 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.print.Doc;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -79,6 +82,42 @@ public class HospitalController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Medicine " + medicine.getName() + " added with id " + medicine.getId());
         }
+    }
+
+    @GetMapping("/patients")
+    public ResponseEntity<?> getAllPatients() {
+        List<Patient> patients = patientRepository.findAll();
+        if (patients.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No patients found.");
+        }
+        return ResponseEntity.ok(patients);
+    }
+
+    @GetMapping("/doctors")
+    public ResponseEntity<?> getAllDoctors() {
+        List<Doctor> doctors = doctorRepository.findAll();
+        if (doctors.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found.");
+        }
+        return ResponseEntity.ok(doctors);
+    }
+
+    @GetMapping("/specialties")
+    public ResponseEntity<?> getAllSpecialties() {
+        List<Specialty> specialties = specialtyRepository.findAll();
+        if (specialties.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No specialties found.");
+        }
+        return ResponseEntity.ok(specialties);
+    }
+
+    @GetMapping("/medicines")
+    public ResponseEntity<?> getAllMedicines() {
+        List<Medicine> medicines = medicineRepository.findAll();
+        if (medicines.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No medicines found.");
+        }
+        return ResponseEntity.ok(medicines);
     }
 
 }
