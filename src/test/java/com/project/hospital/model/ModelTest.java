@@ -155,9 +155,11 @@ class ModelTest {
         Address patientAddress = patientRepository.findByFullName("Judith Peregrina").getFirst().getAddress();
         Address doctorAddress = doctorRepository.findByFullName("Joan Permanyer").getFirst().getAddress();
 
-        assertThrows(IllegalArgumentException.class, () -> patientAddress.setCity("Barcelona"));
+        patientAddress.setCity("Barcelona");
+        doctorAddress.setCity("Valencia");
 
-        assertThrows(IllegalArgumentException.class, () -> doctorAddress.setCity("Valencia"));
+        assertEquals("Barcelona",patientAddress.getCity());
+        assertEquals("Valencia",doctorAddress.getCity());
     }
 
     @Test

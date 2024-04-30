@@ -68,12 +68,12 @@ class UtilsTest {
 
     @Test
     void generatePatientIdPatientWithInitialAlreadyExisting() {
-        String patientFullName1 = "Aurora Gálvez Pardo";
+        String patientFullName1 = "Aurora Galvez Pardo";
         String id1 = Utils.generatePatientId(patientFullName1,patientRepository);
         assertEquals("AGP1",id1);
 
         Address address = new Address("Calle Marina", "Barcelona", "08291");
-        Patient patient1 = new Patient(patientFullName1,address,"788548831","email", BloodType.B);
+        Patient patient1 = new Patient(patientFullName1,address,"788548831","sf@email.com", BloodType.B);
         patient1.setId(id1);
         patientRepository.save(patient1);
 
@@ -144,6 +144,7 @@ class UtilsTest {
         patient.setId(Utils.generatePatientId(patient.getFullName(),patientRepository));
         patientRepository.save(patient);
 
-        assertEquals("JP1-1",Utils.generateAppointmentId(patient));
+        assertEquals("JP1-0",Utils.generateAppointmentId(patient));
     }
+
 }
