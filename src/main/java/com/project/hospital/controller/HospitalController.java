@@ -9,18 +9,17 @@ import com.project.hospital.repository.DoctorRepository;
 import com.project.hospital.repository.MedicineRepository;
 import com.project.hospital.repository.PatientRepository;
 import com.project.hospital.repository.SpecialtyRepository;
+import com.project.hospital.service.AppointmentsService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.print.Doc;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 public class HospitalController {
@@ -35,6 +34,9 @@ public class HospitalController {
 
     @Autowired
     private MedicineRepository medicineRepository;
+
+    @Autowired
+    private AppointmentsService appointmentsService;
 
     @PostMapping("/patient")
     public ResponseEntity<String> addNewPatient(@RequestBody Patient patient) {
@@ -169,6 +171,39 @@ public class HospitalController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine with id " + id + " not found.");
         }
         return ResponseEntity.ok(medicineOptional.get());
+    }
+
+    @PostMapping("/appointment/{patientId}")
+    public ResponseEntity<String> addNewAppointment(@RequestBody String dateString, @PathVariable(name="patientId") String patientId) throws Exception {
+        Optional<Patient> patientOptional = patientRepository.findById(patientId);
+        if (!patientOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + patientId + " not found.");
+        } else {
+            Date date = new Date();
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                date = formatter.parse(dateString);
+
+                // Obtain current date
+                Date currentDate = new Date();
+
+                // Check if given date is posterior to current date
+                if (date.before(currentDate) || date.equals(currentDate)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The date of the appointment must be later than current date.");
+                }
+
+            } catch (ParseException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid date format. Please use dd/MM/yyyy.");
+            }
+
+            // Schedule appointment to the given patient and return message
+            try {
+                String out = appointmentsService.scheduleAppointment(patientOptional.get(), date);
+                return ResponseEntity.status(HttpStatus.CREATED).body(out);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+        }
     }
 
 }

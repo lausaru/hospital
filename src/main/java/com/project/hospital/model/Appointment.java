@@ -2,6 +2,7 @@ package com.project.hospital.model;
 
 import com.project.hospital.repository.DoctorRepository;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.Random;
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Appointment {
     @Id
     private String id;

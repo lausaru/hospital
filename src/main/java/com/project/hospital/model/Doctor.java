@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,6 +20,8 @@ public class Doctor extends Data {
     @OneToOne
     @JoinColumn(name = "specialty_code",referencedColumnName = "code")
     private Specialty specialty;
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Appointment> appointments = new ArrayList<>();
 //    @OneToMany
 //    private List<Appointment> pendingAppointments;
 //    @OneToMany
