@@ -1,10 +1,7 @@
 package com.project.hospital.controller;
 
 import com.project.hospital.Utils;
-import com.project.hospital.model.Doctor;
-import com.project.hospital.model.Medicine;
-import com.project.hospital.model.Patient;
-import com.project.hospital.model.Specialty;
+import com.project.hospital.model.*;
 import com.project.hospital.repository.DoctorRepository;
 import com.project.hospital.repository.MedicineRepository;
 import com.project.hospital.repository.PatientRepository;
@@ -135,6 +132,21 @@ public class HospitalController {
         }
 
         return ResponseEntity.ok(doctors);
+    }
+
+    @GetMapping("appointments/{doctorId}")
+    public ResponseEntity<?> getAppointmentsByDoctorId(@PathVariable(name="doctorId") String id) {
+        Optional<Doctor> doctorOptional = doctorRepository.findById(id);
+        if (!doctorOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor with id " + id + " not found.");
+        }
+
+        List<Appointment> appointments = doctorOptional.get().getAppointments();
+        if (appointments.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Any appointment found for doctor with id " + id);
+        }
+
+        return ResponseEntity.ok(appointments);
     }
 
     @GetMapping("/specialties")
