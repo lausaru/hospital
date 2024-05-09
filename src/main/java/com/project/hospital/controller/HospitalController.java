@@ -9,7 +9,9 @@ import com.project.hospital.repository.DoctorRepository;
 import com.project.hospital.repository.MedicineRepository;
 import com.project.hospital.repository.PatientRepository;
 import com.project.hospital.repository.SpecialtyRepository;
+import com.project.hospital.service.AccessesService;
 import com.project.hospital.service.AppointmentsService;
+import jakarta.persistence.Access;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,9 @@ public class HospitalController {
     @Autowired
     private AppointmentsService appointmentsService;
 
+    @Autowired
+    private AccessesService accessesService;
+
     @PostMapping("/patient")
     public ResponseEntity<String> addNewPatient(@RequestBody Patient patient) {
         String id = Utils.generatePatientId(patient.getFullName(),patientRepository);
@@ -56,6 +61,9 @@ public class HospitalController {
 
         // Save doctor in repository and return message
         doctorRepository.save(doctor);
+
+        // Create a new user with role doctor
+        accessesService.createDoctorUser(doctor);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Doctor " + doctor.getFullName() + " added with id " + id);
     }
