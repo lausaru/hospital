@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.parameters.P;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -67,12 +68,12 @@ class UtilsTest {
 
     @Test
     void generatePatientIdPatientWithInitialAlreadyExisting() {
-        String patientFullName1 = "Aurora Gálvez Pardo";
+        String patientFullName1 = "Aurora Galvez Pardo";
         String id1 = Utils.generatePatientId(patientFullName1,patientRepository);
         assertEquals("AGP1",id1);
 
         Address address = new Address("Calle Marina", "Barcelona", "08291");
-        Patient patient1 = new Patient(patientFullName1,address,"788548831","email", BloodType.B);
+        Patient patient1 = new Patient(patientFullName1,address,"788548831","sf@email.com", BloodType.B);
         patient1.setId(id1);
         patientRepository.save(patient1);
 
@@ -135,4 +136,15 @@ class UtilsTest {
         assertFalse(Utils.isValidSpanishPhoneNumber("584392471")); // Phone number must start with 6, 7, 8 or 9
         assertFalse(Utils.isValidSpanishPhoneNumber("677 93 42 84")); // Phone number must not contain spacings
     }
+
+    @Test
+    void generateAppointmentId_patientWithoutAppointments() {
+        Address judithAddress = new Address("Calle Marina", "Barcelona", "08291");
+        Patient patient = new Patient("Judith Peregrina", judithAddress, "699358321", "jp@email.cat", BloodType.A);
+        patient.setId(Utils.generatePatientId(patient.getFullName(),patientRepository));
+        patientRepository.save(patient);
+
+        assertEquals("JP1-0",Utils.generateAppointmentId(patient));
+    }
+
 }
