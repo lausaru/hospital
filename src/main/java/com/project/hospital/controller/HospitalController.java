@@ -7,6 +7,8 @@ import com.project.hospital.service.AppointmentsService;
 import org.apache.coyote.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.project.hospital.security.services.impl.UserService;
+import com.project.hospital.service.AppointmentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,9 @@ public class HospitalController {
     @Autowired
     private AppointmentsService appointmentsService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/patient")
     public ResponseEntity<String> addNewPatient(@RequestBody Patient patient) {
         String id = Utils.generatePatientId(patient.getFullName(),patientRepository);
@@ -54,6 +59,9 @@ public class HospitalController {
 
         // Save doctor in repository and return message
         doctorRepository.save(doctor);
+
+        // Create a new user with role doctor
+        userService.createDoctorUser(doctor);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Doctor " + doctor.getFullName() + " added with id " + id);
     }
