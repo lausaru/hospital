@@ -1,14 +1,12 @@
 package com.project.hospital.controller;
 
 import com.project.hospital.Utils;
-import com.project.hospital.model.Doctor;
-import com.project.hospital.model.Medicine;
-import com.project.hospital.model.Patient;
-import com.project.hospital.model.Specialty;
-import com.project.hospital.repository.DoctorRepository;
-import com.project.hospital.repository.MedicineRepository;
-import com.project.hospital.repository.PatientRepository;
-import com.project.hospital.repository.SpecialtyRepository;
+import com.project.hospital.model.*;
+import com.project.hospital.repository.*;
+import com.project.hospital.service.AppointmentsService;
+import org.apache.coyote.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import com.project.hospital.security.services.impl.UserService;
 import com.project.hospital.service.AppointmentsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,8 @@ public class HospitalController {
 
     @Autowired
     private MedicineRepository medicineRepository;
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     @Autowired
     private AppointmentsService appointmentsService;
@@ -142,6 +142,55 @@ public class HospitalController {
 
         return ResponseEntity.ok(doctors);
     }
+
+    @GetMapping("appointments/{doctorId}")
+    public ResponseEntity<?> getAppointmentsByDoctorId(@PathVariable(name="doctorId") String id, @RequestBody(required = false) Optional<String> dateString) {
+        Optional<Doctor> doctorOptional = doctorRepository.findById(id);
+        if (doctorOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor with id " + id + " not found.");
+        }
+
+        if (dateString.isEmpty()) {
+            List<Appointment> appointments = appointmentRepository.findByDoctorId(id);
+            if (appointments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Any appointment found for doctor with id " + id);
+            }
+
+            StringBuilder response = new StringBuilder();
+
+            for (Appointment appointment : appointments) {
+                response.append(appointment.printInfo()).append("\n");
+            }
+
+            return ResponseEntity.ok(response.toString());
+
+        } else {
+            Date date = new Date();
+            try {
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                date = formatter.parse(dateString.get());
+
+            } catch (ParseException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid date format. Please use dd/MM/yyyy.");
+            }
+
+            // Show appointments for the given doctor and date
+            List<Appointment> appointments = appointmentRepository.findByDoctorIdAndDate(id,date);
+            if (appointments.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Any appointment found for doctor with id " + id + " at date " + dateString);
+            }
+
+            StringBuilder response = new StringBuilder();
+
+            for (Appointment appointment : appointments) {
+                response.append(appointment.printInfo()).append("\n");
+            }
+
+            return ResponseEntity.ok(response.toString());
+        }
+
+    }
+
 
     @GetMapping("/specialties")
     public ResponseEntity<?> getAllSpecialties() {

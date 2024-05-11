@@ -99,6 +99,9 @@ public class SecurityConfig {
                 .requestMatchers(GET, "/doctors/specialty/{code}").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers(GET, "/specialty/{code}").hasAnyAuthority("ROLE_ADMIN")
                 .requestMatchers(GET, "/medicine/{id}").hasAnyAuthority("ROLE_ADMIN")
+
+                .requestMatchers(GET, "/appointments/{doctorId}").hasAnyAuthority("ROLE_ADMIN","ROLE_DOCTOR")
+
                 .anyRequest().authenticated());
         // add the custom authentication filter to the http security object
         http.addFilter(customAuthenticationFilter);
