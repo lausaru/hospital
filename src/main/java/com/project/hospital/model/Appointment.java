@@ -45,7 +45,6 @@ public class Appointment {
         appointmentJson.put("Date", date.toString());
         appointmentJson.put("Patient", patient.getFullName() + " (id: " + patient.getId() + ")");
         appointmentJson.put("Doctor", doctor.getFullName() + " (id: " + doctor.getId() + ")");
-        appointmentJson.put("Diagnosis", diagnosis != null ? diagnosis.toString() : "null");
 
         StringBuilder appointmentInfo = new StringBuilder();
         for (String key : appointmentJson.keySet()) {
