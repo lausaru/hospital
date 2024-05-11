@@ -19,8 +19,6 @@ public class HospitalController {
     private SpecialtyRepository specialtyRepository;
     @Autowired
     private MedicineRepository medicineRepository;
-    @Autowired
-    private AppointmentRepository appointmentRepository;
 
     // Create new specialty
     @PostMapping("/specialty")
