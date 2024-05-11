@@ -5,6 +5,8 @@ import com.project.hospital.model.*;
 import com.project.hospital.repository.*;
 import com.project.hospital.service.AppointmentsService;
 import org.apache.coyote.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -136,17 +138,24 @@ public class HospitalController {
     @GetMapping("appointments/{doctorId}")
     public ResponseEntity<?> getAppointmentsByDoctorId(@PathVariable(name="doctorId") String id, @RequestBody(required = false) Optional<String> dateString) {
         Optional<Doctor> doctorOptional = doctorRepository.findById(id);
-        if (!doctorOptional.isPresent()) {
+        if (doctorOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor with id " + id + " not found.");
         }
 
-        if (!dateString.isPresent()) {
+        if (dateString.isEmpty()) {
             List<Appointment> appointments = appointmentRepository.findByDoctorId(id);
             if (appointments.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Any appointment found for doctor with id " + id);
             }
 
-            return ResponseEntity.ok(appointments);
+            StringBuilder response = new StringBuilder();
+
+            for (Appointment appointment : appointments) {
+                response.append(appointment.printInfo()).append("\n");
+            }
+
+            return ResponseEntity.ok(response.toString());
+
         } else {
             Date date = new Date();
             try {
@@ -163,7 +172,13 @@ public class HospitalController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Any appointment found for doctor with id " + id + " at date " + dateString);
             }
 
-            return ResponseEntity.ok(appointments);
+            StringBuilder response = new StringBuilder();
+
+            for (Appointment appointment : appointments) {
+                response.append(appointment.printInfo()).append("\n");
+            }
+
+            return ResponseEntity.ok(response.toString());
         }
 
     }
