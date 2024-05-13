@@ -25,16 +25,18 @@ public class AppointmentsService {
 
     public String scheduleAppointment(Patient patient, Date date) throws Exception {
         Appointment newAppointment = new Appointment(date, patient);
-        newAppointment.setId(Utils.generateAppointmentId(patient));
 
         // Set the appointment id and doctor
         Doctor doctor = AppointmentsService.setAppointmentsDoctor(newAppointment, doctorRepository);
         newAppointment.setDoctor(doctor);
 
         // Add the appointment to the patient and to the doctor and the repository
+        String id = Utils.generateAppointmentId(patient);
+        newAppointment.setId(id);
+
         patient.addAppointment(newAppointment);
-        doctor.addAppointment(newAppointment);
         patientRepository.save(patient);
+        doctor.addAppointment(newAppointment);
         doctorRepository.save(doctor);
         appointmentRepository.save(newAppointment);
 

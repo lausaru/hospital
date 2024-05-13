@@ -24,7 +24,6 @@ public class Appointment {
     private boolean closed = false;
     private Date date;
     @ManyToOne
-    @JsonBackReference
     private Patient patient;
     @ManyToOne
     private Doctor doctor;

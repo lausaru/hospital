@@ -43,6 +43,7 @@ public class DoctorControllerTest {
     @AfterEach
     void tearDown() {
         doctorRepository.deleteAll();
+        specialtyRepository.deleteAll();
     }
 
     @Test

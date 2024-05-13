@@ -5,7 +5,6 @@ import com.project.hospital.Utils;
 import com.project.hospital.model.Address;
 import com.project.hospital.model.BloodType;
 import com.project.hospital.model.Patient;
-import com.project.hospital.repository.DoctorRepository;
 import com.project.hospital.repository.PatientRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,14 +17,12 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Date;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-public class PatientController {
+public class PatientControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;
     @Autowired
@@ -33,7 +30,6 @@ public class PatientController {
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper = new ObjectMapper();
-    private Date date;
 
     @BeforeEach
     void setUp() {

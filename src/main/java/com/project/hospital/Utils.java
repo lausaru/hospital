@@ -59,11 +59,10 @@ public abstract class Utils {
         // Obtain the patient's id
         String patientId = patient.getId();
 
-        // Obtain the number of appointments
-        int numAppointments = patient.getAppointments().size();
+        long timestamp = System.currentTimeMillis();
 
         // Generate and set id
-        return patientId + "-" + numAppointments;
+        return patientId + "-" + timestamp;
     }
 
     // Method to obtain all the initial letters of each word in a String

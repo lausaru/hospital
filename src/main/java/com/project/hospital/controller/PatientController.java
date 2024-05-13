@@ -24,7 +24,6 @@ public class PatientController {
     @PostMapping("/patient")
     public ResponseEntity<String> addNewPatient(@RequestBody Patient patient) {
         Patient patientOut = entitiesService.addNewPatient(patient);
-
         return ResponseEntity.status(HttpStatus.CREATED).body("Patient " + patient.getFullName() + " added with id " + patientOut.getId());
     }
 
