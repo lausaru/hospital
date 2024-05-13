@@ -3,12 +3,15 @@ package com.project.hospital.controller;
 import com.project.hospital.Utils;
 import com.project.hospital.model.Patient;
 import com.project.hospital.repository.PatientRepository;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -48,5 +51,18 @@ public class PatientController {
         return ResponseEntity.ok(patientOptional.get());
     }
 
+    // Delete patient with given id
+    @DeleteMapping("/patient/{id}")
+    public ResponseEntity<?> deletePatientById(@PathVariable(name="id") String id) {
+        Optional<Patient> patientOptional = patientRepository.findById(id);
+        if (!patientOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + id + " not found.");
+        }
+
+        // If the patient exists, delete it from the repo
+        patientRepository.delete(patientOptional.get());
+
+        return ResponseEntity.ok("Patient"  + patientOptional.get().getFullName() + " with id " + id + " successfully deleted.");
+    }
 
 }

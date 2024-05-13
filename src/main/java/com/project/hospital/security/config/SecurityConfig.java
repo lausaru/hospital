@@ -17,8 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 /**
@@ -101,6 +100,9 @@ public class SecurityConfig {
                 .requestMatchers(GET, "/medicine/{id}").hasAnyAuthority("ROLE_ADMIN")
 
                 .requestMatchers(GET, "/appointments/{doctorId}").hasAnyAuthority("ROLE_ADMIN","ROLE_DOCTOR")
+
+                .requestMatchers(DELETE, "/doctor/{id}").hasAnyAuthority("ROLE_ADMIN")
+                .requestMatchers(DELETE, "/patient/{id}").hasAnyAuthority("ROLE_ADMIN")
 
                 .anyRequest().authenticated());
         // add the custom authentication filter to the http security object

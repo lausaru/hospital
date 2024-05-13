@@ -68,4 +68,18 @@ public class DoctorController {
 
         return ResponseEntity.ok(doctors);
     }
+
+    // Delete doctor with given id
+    @DeleteMapping("/doctor/{id}")
+    public ResponseEntity<?> deleteDoctorById(@PathVariable(name="id") String id) {
+        Optional<Doctor> doctorOptional = doctorRepository.findById(id);
+        if (!doctorOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor with id " + id + " not found.");
+        }
+
+        // If the doctor exists, delete it from the repo
+        doctorRepository.delete(doctorOptional.get());
+
+        return ResponseEntity.ok("Doctor "  + doctorOptional.get().getFullName() + ", with id " + id + ", successfully deleted.");
+    }
 }
