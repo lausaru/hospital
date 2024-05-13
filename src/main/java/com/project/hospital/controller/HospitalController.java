@@ -2,6 +2,7 @@ package com.project.hospital.controller;
 
 import com.project.hospital.Utils;
 import com.project.hospital.model.Medicine;
+import com.project.hospital.model.Patient;
 import com.project.hospital.model.Specialty;
 import com.project.hospital.repository.MedicineRepository;
 import com.project.hospital.repository.SpecialtyRepository;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 @RestController
@@ -52,6 +54,23 @@ public class HospitalController {
         return ResponseEntity.ok(specialtyOptional.get());
     }
 
+    // Modify specialty name
+    @PutMapping("/specialty/{code}")
+    public ResponseEntity<?> updateMedicineById(@PathVariable(name="code") String code, @RequestBody String specialtyName) {
+        Optional<Specialty> specialtyOptional = specialtyRepository.findByCode(code);
+        if (!specialtyOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Specialty with code " + code + " not found.");
+        }
+
+        Specialty specialtyUpdated = specialtyOptional.get();
+        specialtyUpdated.setName(specialtyName);
+
+        // Save specialty in repository and return message
+        specialtyRepository.save(specialtyUpdated);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Specialty name with code " + code + " successfully updated.");
+    }
+
     // Create new medicine
     @PostMapping("/medicine")
     public ResponseEntity<String> addNewMedicine(@RequestBody String medicineName) {
@@ -88,4 +107,21 @@ public class HospitalController {
         return ResponseEntity.ok(medicineOptional.get());
     }
 
+    // Modify medicine name
+    @PutMapping("/medicine/{id}")
+    public ResponseEntity<?> updateMedicineById(@PathVariable(name="id") int id, @RequestBody String medicineName) {
+        Optional<Medicine> medicineOptional = medicineRepository.findById(id);
+        if (!medicineOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Medicine with id " + id + " not found.");
+        }
+
+        Medicine medicineUpdated = medicineOptional.get();
+        medicineUpdated.setId(id);
+        medicineUpdated.setName(medicineName);
+
+        // Save medicine in repository and return message
+        medicineRepository.save(medicineUpdated);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Medicine with id " + medicineUpdated.getId() + " successfully updated.");
+    }
 }

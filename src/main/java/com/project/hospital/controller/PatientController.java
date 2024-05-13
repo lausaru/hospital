@@ -65,32 +65,4 @@ public class PatientController {
         return ResponseEntity.ok("Patient"  + patientOptional.get().getFullName() + " with id " + id + " successfully deleted.");
     }
 
-    // Modify patient data
-    @PutMapping("/patient/{id}")
-    public ResponseEntity<?> updatePatientById(@PathVariable(name="id") String id, @RequestBody Map<String, Object> updatedPatientInfo) {
-        Optional<Patient> patientOptional = patientRepository.findById(id);
-        if (!patientOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Patient with id " + id + " not found.");
-        }
-
-        Patient existingPatient = patientOptional.get();
-
-        for (Map.Entry<String, Object> entry : updatedPatientInfo.entrySet()) {
-            String propertyName = entry.getKey();
-            Object propertyValue = entry.getValue();
-
-            try {
-                Field field = Patient.class.getDeclaredField(propertyName);
-                field.setAccessible(true);
-                field.set(existingPatient, propertyValue);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating patient.");
-            }
-        }
-        patientRepository.save(existingPatient);
-
-        return ResponseEntity.ok("Patient " + existingPatient.getFullName() + ", with id " + id + ", successfully updated.");
-    }
-
 }
