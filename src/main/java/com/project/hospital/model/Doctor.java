@@ -31,4 +31,8 @@ public class Doctor extends Data {
         super(fullName, address, phone, email);
         setSpecialty(specialty);
     }
+
+    public void addAppointment (Appointment appointment) {
+        this.appointments.add(appointment);
+    }
 }

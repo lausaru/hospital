@@ -7,12 +7,15 @@ import com.project.hospital.repository.DoctorRepository;
 import com.project.hospital.repository.PatientRepository;
 import com.project.hospital.repository.SpecialtyRepository;
 import com.project.hospital.service.AppointmentsService;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +42,18 @@ public class AppointmentControllerTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper = new ObjectMapper();
     private Date date;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+    @AfterEach
+    void tearDown() {
+        patientRepository.deleteAll();
+        doctorRepository.deleteAll();
+        specialtyRepository.deleteAll();
+    }
 
     @Test
     void addNewAppointment_notMG1() throws Exception {

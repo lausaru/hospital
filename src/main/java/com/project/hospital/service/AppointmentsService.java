@@ -6,6 +6,8 @@ import com.project.hospital.repository.AppointmentRepository;
 import com.project.hospital.repository.DoctorRepository;
 import com.project.hospital.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -29,9 +31,11 @@ public class AppointmentsService {
         Doctor doctor = AppointmentsService.setAppointmentsDoctor(newAppointment, doctorRepository);
         newAppointment.setDoctor(doctor);
 
-        // Add the appointment to the patient and the repository
+        // Add the appointment to the patient and to the doctor and the repository
         patient.addAppointment(newAppointment);
+        doctor.addAppointment(newAppointment);
         patientRepository.save(patient);
+        doctorRepository.save(doctor);
         appointmentRepository.save(newAppointment);
 
         return "Appointment scheduled for patient " + patient.getFullName() + " (id " + patient.getId() + ") at date of " + date + " with doctor " + doctor.getFullName() + " (id " + doctor.getId() + ").";
@@ -68,5 +72,17 @@ public class AppointmentsService {
             Random rand = new Random();
             return doctorsMedGen.get(rand.nextInt(doctorsMedGen.size()));
         }
+    }
+
+    public boolean isCorrectDate (Date date) {
+        // Obtain current date
+        Date currentDate = new Date();
+
+        // Check if given date is posterior to current date
+        if (date.before(currentDate) || date.equals(currentDate)) {
+            return false;
+        }
+
+        return true;
     }
 }
