@@ -6,6 +6,7 @@ import com.project.hospital.model.Medicine;
 import com.project.hospital.model.Patient;
 import com.project.hospital.model.Specialty;
 import com.project.hospital.repository.*;
+import com.project.hospital.security.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ public class EntitiesService {
     SpecialtyRepository specialtyRepository;
     @Autowired
     MedicineRepository medicineRepository;
+    @Autowired
+    UserService userService;
 
     // Methods for doctors
     public Doctor addNewDoctor(Doctor doctor) {
@@ -30,6 +33,9 @@ public class EntitiesService {
 
         // Save doctor in repository
         doctorRepository.save(doctor);
+
+        // Create new doctor user
+        userService.createDoctorUser(doctor);
         return doctor;
     }
 

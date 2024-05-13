@@ -19,6 +19,11 @@ public class DoctorController {
     // Create new doctor
     @PostMapping("/doctor")
     public ResponseEntity<String> addNewDoctor(@RequestBody Doctor doctor) {
+        Specialty doctorSpecialty = entitiesService.specialtyWithCodeExists(doctor.getSpecialty().getCode());
+        if (doctorSpecialty == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor cannot be added since specialty with code " + doctor.getSpecialty().getCode() + " does not exist.");
+        }
+
         Doctor doctorOut = entitiesService.addNewDoctor(doctor);
         return ResponseEntity.status(HttpStatus.CREATED).body("Doctor " + doctorOut.getFullName() + " added with id " + doctorOut.getId());
     }
