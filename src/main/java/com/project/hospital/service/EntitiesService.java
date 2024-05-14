@@ -1,10 +1,7 @@
 package com.project.hospital.service;
 
 import com.project.hospital.Utils;
-import com.project.hospital.model.Doctor;
-import com.project.hospital.model.Medicine;
-import com.project.hospital.model.Patient;
-import com.project.hospital.model.Specialty;
+import com.project.hospital.model.*;
 import com.project.hospital.repository.*;
 import com.project.hospital.security.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,5 +156,26 @@ public class EntitiesService {
             return medicineOptional.get();
         }
         return null;
+    }
+
+    // Methods for printing info
+    public String printInfo(List<?> entities) {
+        if (entities.isEmpty()) {
+            return (entities.get(0) instanceof Doctor) ? "No doctors found." : "No patients found.";
+        }
+
+        StringBuilder response = new StringBuilder();
+        int count = 1;
+        for (Object entity : entities) {
+            if (entity instanceof Doctor) {
+                response.append("·Doctor number ").append(count++).append(":\n");
+                response.append(((Doctor) entity).printInfo()).append("\n");
+            } else if (entity instanceof Patient) {
+                response.append("·Patient number ").append(count++).append(":\n");
+                response.append(((Patient) entity).printInfo()).append("\n");
+            }
+        }
+
+        return response.toString();
     }
 }

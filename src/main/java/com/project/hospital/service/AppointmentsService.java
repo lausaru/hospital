@@ -87,4 +87,34 @@ public class AppointmentsService {
 
         return true;
     }
+
+    public String printAppointmentsByDoctorId (String doctorId) {
+        List<Appointment> appointments = appointmentRepository.findByDoctorId(doctorId);
+        if (appointments.isEmpty()) {
+            return "Any appointment found for doctor with id " + doctorId;
+        }
+
+        StringBuilder response = new StringBuilder();
+
+        for (Appointment appointment : appointments) {
+            response.append(appointment.printInfo()).append("\n");
+        }
+
+        return response.toString();
+    }
+
+    public String printAppointmentsByDoctorIdAndDate (String doctorId, Date date) {
+        List<Appointment> appointments = appointmentRepository.findByDoctorIdAndDate(doctorId,date);
+        if (appointments.isEmpty()) {
+            return "Any appointment found for doctor with id " + doctorId + " at given date.";
+        }
+
+        StringBuilder response = new StringBuilder();
+
+        for (Appointment appointment : appointments) {
+            response.append(appointment.printInfo()).append("\n");
+        }
+
+        return response.toString();
+    }
 }

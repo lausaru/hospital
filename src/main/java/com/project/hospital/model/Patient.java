@@ -2,6 +2,7 @@ package com.project.hospital.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,5 +29,24 @@ public class Patient extends Data {
 
     public void addAppointment (Appointment appointment) {
         this.appointments.add(appointment);
+    }
+
+    public String printInfo() {
+        JSONObject patientJson = new JSONObject();
+        patientJson.put("\tPatient id", id);
+        patientJson.put("\tFull name", this.getFullName());
+        patientJson.put("\tStreet address", super.getAddress().getStreetAddress());
+        patientJson.put("\tCity", super.getAddress().getCity());
+        patientJson.put("\tPostal code", super.getAddress().getPostalCode());
+        patientJson.put("\tPhone", this.getPhone());
+        patientJson.put("\tEmail", this.getEmail());
+        patientJson.put("\tBlood type", this.getBloodType().toString());
+
+        StringBuilder patientsInfo = new StringBuilder();
+        for (String key : patientJson.keySet()) {
+            patientsInfo.append(key).append(": ").append(patientJson.get(key)).append("\n");
+        }
+
+        return patientsInfo.toString();
     }
 }
