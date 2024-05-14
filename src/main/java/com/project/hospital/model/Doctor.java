@@ -34,19 +34,19 @@ public class Doctor extends Data {
     }
 
     public String printInfo() {
-        JSONObject appointmentJson = new JSONObject();
-        appointmentJson.put("Doctor id", id);
-        appointmentJson.put("Full name", this.getFullName());
-        appointmentJson.put("Street address", super.getAddress().getStreetAddress());
-        appointmentJson.put("City", super.getAddress().getCity());
-        appointmentJson.put("Postal code", super.getAddress().getPostalCode());
-        appointmentJson.put("Phone", this.getPhone());
-        appointmentJson.put("Email", this.getEmail());
-        appointmentJson.put("Specialty", this.getSpecialty().getName() + " (code: " + this.getSpecialty().getCode() + ")");
+        JSONObject doctorJson = new JSONObject();
+        doctorJson.put("\tDoctor id", id);
+        doctorJson.put("\tFull name", this.getFullName());
+        doctorJson.put("\tStreet address", super.getAddress().getStreetAddress());
+        doctorJson.put("\tCity", super.getAddress().getCity());
+        doctorJson.put("\tPostal code", super.getAddress().getPostalCode());
+        doctorJson.put("\tPhone", this.getPhone());
+        doctorJson.put("\tEmail", this.getEmail());
+        doctorJson.put("\tSpecialty", this.getSpecialty().getName() + " (code: " + this.getSpecialty().getCode() + ")");
 
         StringBuilder doctorsInfo = new StringBuilder();
-        for (String key : appointmentJson.keySet()) {
-            doctorsInfo.append(key).append(": ").append(appointmentJson.get(key)).append("\n");
+        for (String key : doctorJson.keySet()) {
+            doctorsInfo.append(key).append(": ").append(doctorJson.get(key)).append("\n");
         }
 
         return doctorsInfo.toString();

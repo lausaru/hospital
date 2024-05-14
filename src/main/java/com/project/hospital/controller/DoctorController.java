@@ -32,7 +32,7 @@ public class DoctorController {
     @GetMapping("/doctors")
     public ResponseEntity<?> getAllDoctors() {
         List<Doctor> doctors = entitiesService.getAllDoctors();
-        String out = entitiesService.printDoctorsInfo(doctors);
+        String out = entitiesService.printInfo(doctors);
         if (out.contains("No doctors")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(out);
         }
@@ -58,7 +58,7 @@ public class DoctorController {
         }
 
         List<Doctor> doctors = entitiesService.getAllDoctors();
-        String out = entitiesService.printDoctorsInfo(doctors);
+        String out = entitiesService.printInfo(doctors);
         if (out.contains("No doctors")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found with specialty " + specialty.getName() + ".");
         }

@@ -159,14 +159,21 @@ public class EntitiesService {
     }
 
     // Methods for printing info
-    public String printDoctorsInfo (List<Doctor> doctors) {
-        if (doctors.isEmpty()) {
-            return "No doctors found.";
+    public String printInfo(List<?> entities) {
+        if (entities.isEmpty()) {
+            return (entities.get(0) instanceof Doctor) ? "No doctors found." : "No patients found.";
         }
 
         StringBuilder response = new StringBuilder();
-        for (Doctor doctor : doctors) {
-            response.append(doctor.printInfo()).append("\n");
+        int count = 1;
+        for (Object entity : entities) {
+            if (entity instanceof Doctor) {
+                response.append("·Doctor number ").append(count++).append(":\n");
+                response.append(((Doctor) entity).printInfo()).append("\n");
+            } else if (entity instanceof Patient) {
+                response.append("·Patient number ").append(count++).append(":\n");
+                response.append(((Patient) entity).printInfo()).append("\n");
+            }
         }
 
         return response.toString();
