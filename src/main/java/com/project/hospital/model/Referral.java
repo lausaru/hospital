@@ -17,7 +17,7 @@ public class Referral {
     @OneToOne
     private Specialty specialty;
 
-    public Referral(Date date, Specialty specialty) {
+    public Referral(Specialty specialty) {
         setDate(new Date());
         setSpecialty(specialty);
     }
