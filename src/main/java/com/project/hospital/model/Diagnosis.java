@@ -18,19 +18,23 @@ public class Diagnosis {
     @OneToOne
     private Referral referral;
     private boolean referred;
+    @OneToOne
+    private Medicine medicine;
 
-    public Diagnosis(Specialty specialty, String disease, String observations) {
+    public Diagnosis(Specialty specialty, String disease, String observations, Medicine medicine) {
         setSpecialty(specialty);
         setDisease(disease);
         setObservations(observations);
+        setMedicine(medicine);
         this.referred = false;
     }
 
-    public Diagnosis(Specialty specialty, String disease, String observations, Referral referral) {
+    public Diagnosis(Specialty specialty, String disease, String observations, Medicine medicine, Referral referral) {
         setSpecialty(specialty);
         setDisease(disease);
         setObservations(observations);
         setReferral(referral);
+        setMedicine(medicine);
         this.referred = true;
     }
 }
