@@ -159,9 +159,10 @@ public class EntitiesService {
     }
 
     // Methods for printing info
+    // Methods for printing info
     public String printInfo(List<?> entities) {
         if (entities.isEmpty()) {
-            return "Not found.";
+            return ("Not found.");
         }
 
         StringBuilder response = new StringBuilder();
