@@ -16,17 +16,30 @@ La lógica seguida para programar una cita a un paciente depende de si dicho pac
 
 ## Class Diagram
 
-Diagrama de clases con sus atributos, métodos y relaciones entre ellas:
-![alt text](<Hospital AU - UML Class Diagram.png>)
+Diagrama de clases con sus atributos, métodos y relaciones entre ellas adjunto como archivo.
+![alt text](<Hospital AU - UML Class Diagram-1.png>)
 
 ## Setup
 
-Setup
+Para poder inicializar la aplicación es necesario tener el puerto 8080 (http://localhost:8080) libre de cualquier otra ejecución. También es necesario crear la base de datos llamada "hospital" en MySQL, así como configurar la conexión a la base de datos en el archivo application.properties, especificando usuario y contraseña (asegurando que dicho usuario tenga acceso a la bbdd creada).
+
+Con tal de acceder a los endpoints para hacer peticiones a la API es necesario iniciar sesión con un usuario existente mediante una llamada de tipo GET a la API, con tal de obtener un token de autenticación. Esto debe hacerse a través del endpoint http://localhost:8080/api/login al cual tiene acceso cualquier usuario.
+- Ejemplo de inicio de sesión: http://localhost:8080/api/login?username=john&password=1234
+
+Una vez hecha la llamada a la API, se recibe un token de autenticación como respuesta si el login es correcto. Este token debe introducirse en la cabecera de las peticiones al resto de endpoints, para que pueda verificarse si el usuario que ha hecho login tiene el rol necesario que le permita realizar la acción específica de cada endpoint.
 
 
 ## Technologies used
 
-Technologies used
+Las tecnologías usadas para este proyecto han sido Java como lenguaje de programación, haciendo uso de IntelliJ como IDE.
+
+Se ha usado **Maven** como gestor de paquetes para inyectar las dependencias, bajadas de la nube, necesarias para realizar y compilar el proyecto, o para facilitar la codificación. Por ejemplo, se ha usado la librería Lombok para reducir la cantidad de código boilerplate y agilizar código repetitivo.
+
+También se ha usado el conjunto de librerías de **Spring Boot** que configura el framework de Spring y así permite establecer la estructura del proyecto por capas (modelo, controlador, repositorio, servicio). Este contexto de Spring facilita la creación de la aplicación mediante la gestión de, por ejemplo, la conexión y las consultas a la base de datos a través de peticiones a los controladores construidos.
+En este caso se utiliza **MySQL** como el sistema de gestión de bases de datos relacional para almacenar y recuperar datos.
+
+Por último, se ha usado JPA (Java Persistance API) para mapear de manera muy simple objetos Java a entidades de la base de datos relacional, sin tener que escribir consultas SQL directamente.
+
 
 
 ## Controllers and Routes structure
@@ -191,9 +204,22 @@ Descripción de las rutas de tipo POST, GET, PUT y DELETE:
 
 
 ## Extra links
-Google Slides Presentation: https://docs.google.com/presentation/d/1MH3PY4GE_angRsA9AcBq8tqWXCnlIYHfjJmd2qaEhTo/edit#slide=id.g2dc23ea6569_2_281
+- Google Slides Presentation: https://docs.google.com/presentation/d/1MH3PY4GE_angRsA9AcBq8tqWXCnlIYHfjJmd2qaEhTo/edit#slide=id.g2dc23ea6569_2_281
+- Task management app: https://lausr.planio.com/projects/website-redesign/issues
 
 
 ## Future work
 
-dsg
+Este proyecto ha permitido crear una primera versión inicial, simple pero funcional, del sistema de gestión de un hospital. Las funcionalidades implementadas son básicas y pretenden ser mejoradas y ampliadas. El futuro paso imprescindible a seguir para completar el proyecto, que no ha podido ser completado por limitaciones de tiempo, sería el siguiente:
+* Implementar el feature de realizar una revisión médica. Crear métodos con la lógica de la realización de citas por parte de médicos a sus pacientes, y gestionar estas citas a través de endpoints, contemplando ambos casos: que el paciente sea derivado, o no.
+
+* Relacionado con esto, la intención era también implementar una lógica respecto a los medicamentos que puedan recetar los médicos a sus pacientes, comprobando que dicho medicamento sea "compatible" en cada caso con el paciente en cuestión (mediante el uso del atributo de Grupo Sanguíneo del paciente, que debía también ser integrado como atributo en la clase Medicine para indicar con que grupos es compatible cada medicamento).
+
+A parte de esto, muchas otras funcionalidades podrían ser añadidas, como por ejemplo:
+* Introducción de una nueva clase Enfermera que represente otro rol con sus correspondientes permisos para realizar determinadas acciones (llamadas a la API), como por ejemplo la gestión de citas, sin poder realizar revisiones (esto solo podría ejecutarlo un médico).
+* Tener en cuenta que los diagnósticos solo pueden ser vistos por los médicos, y no por ningún otro tipo de rol de usuario (ni administradores, ni enfermeras...).
+* Modificar los permisos de acceso a información de un médico a las citas médicas. Actualmente cualquier médico puede ver las citas de cualquier médico, e idealmente solo debería poder ver las suyas.
+* Añadir un nuevo método de consulta de datos para los usuarios con rol doctor para que puedan ver la información de la última cita de un paciente, para poder así realizar la cita actual con esa información.
+* Gestión de pruebas diagnósticas como parte de la "receta" de un médico, a través de la creación de un nuevo tipo de cita médica.
+
+La gestión de un hospital es muy extensa y por ello este proyecto plantea muchas oportunidades. Otro punto interesante para aplicar podría ser analizar de alguna forma las faltas o fallos de algún sistema actual en funcionamiento e intentar plantear la estructura de implementación como reto. Por último, también sería interesante continuar este proyecto creando una interfaz de usuario o integrando la app en una web programando con frontend.
