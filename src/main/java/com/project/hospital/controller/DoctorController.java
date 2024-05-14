@@ -33,10 +33,10 @@ public class DoctorController {
     public ResponseEntity<?> getAllDoctors() {
         List<Doctor> doctors = entitiesService.getAllDoctors();
         String out = entitiesService.printInfo(doctors);
-        if (out.contains("No doctors")) {
+        if (out.contains("Not found")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(out);
         }
-        return ResponseEntity.ok(out);
+        return ResponseEntity.ok("No doctors found.");
     }
 
     // Show doctor with given id
@@ -59,7 +59,7 @@ public class DoctorController {
 
         List<Doctor> doctors = entitiesService.getAllDoctors();
         String out = entitiesService.printInfo(doctors);
-        if (out.contains("No doctors")) {
+        if (out.contains("Not found")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found with specialty " + specialty.getName() + ".");
         }
 
