@@ -161,7 +161,7 @@ public class EntitiesService {
     // Methods for printing info
     public String printInfo(List<?> entities) {
         if (entities.isEmpty()) {
-            return (entities.get(0) instanceof Doctor) ? "No doctors found." : "No patients found.";
+            return "Not found.";
         }
 
         StringBuilder response = new StringBuilder();

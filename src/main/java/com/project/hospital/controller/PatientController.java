@@ -32,10 +32,10 @@ public class PatientController {
     public ResponseEntity<?> getAllPatients() {
         List<Patient> patients = entitiesService.getAllPatients();
         String out = entitiesService.printInfo(patients);
-        if (out.contains("No patients")) {
+        if (out.contains("Not found")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(out);
         }
-        return ResponseEntity.ok(out);
+        return ResponseEntity.ok("No patients found.");
     }
 
     // Show doctor with given id

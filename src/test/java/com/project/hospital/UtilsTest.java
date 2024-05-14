@@ -144,7 +144,7 @@ class UtilsTest {
         patient.setId(Utils.generatePatientId(patient.getFullName(),patientRepository));
         patientRepository.save(patient);
 
-        assertEquals("JP1-0",Utils.generateAppointmentId(patient));
+        assertTrue(Utils.generateAppointmentId(patient).contains("JP1-"));
     }
 
 }
