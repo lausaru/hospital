@@ -70,7 +70,7 @@ public class HospitalController {
     @PostMapping("/medicine")
     public ResponseEntity<String> addNewMedicine(@RequestBody String medicineName) {
         Medicine medicine = entitiesService.medicineWithNameExists(medicineName);
-        if (medicine == null) {
+        if (medicine != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Medicine with name " + medicine.getName() + " already exists (with id " + medicine.getId() + ").");
         } else {
             Medicine medicineNew = entitiesService.addNewMedicine(medicineName);

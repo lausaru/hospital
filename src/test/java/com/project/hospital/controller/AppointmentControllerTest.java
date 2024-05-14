@@ -86,6 +86,7 @@ public class AppointmentControllerTest {
 
         Doctor doctor = new Doctor("Joan Ledesma", new Address("Calle Balmes", "Valencia", "08291"), "699358321", "email@test.com", medGen);
         doctor.setId(Utils.generateDoctorId(doctor.getFullName(),doctorRepository));
+        doctorRepository.save(doctor);
 
         String dateString = "04/06/2024";
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
