@@ -32,10 +32,11 @@ public class DoctorController {
     @GetMapping("/doctors")
     public ResponseEntity<?> getAllDoctors() {
         List<Doctor> doctors = entitiesService.getAllDoctors();
-        if (doctors.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found.");
+        String out = entitiesService.printDoctorsInfo(doctors);
+        if (out.contains("No doctors")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(out);
         }
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity.ok(out);
     }
 
     // Show doctor with given id
@@ -45,7 +46,7 @@ public class DoctorController {
         if (doctor == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor with id " + id + " not found.");
         }
-        return ResponseEntity.ok(doctor);
+        return ResponseEntity.ok(doctor.printInfo());
     }
 
     // Show doctors with given specialty code
@@ -56,12 +57,13 @@ public class DoctorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Specialty with code " + code + " not found.");
         }
 
-        List<Doctor> doctors = entitiesService.findBySpecialty(code);
-        if (doctors.isEmpty()) {
+        List<Doctor> doctors = entitiesService.getAllDoctors();
+        String out = entitiesService.printDoctorsInfo(doctors);
+        if (out.contains("No doctors")) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No doctors found with specialty " + specialty.getName() + ".");
         }
 
-        return ResponseEntity.ok(doctors);
+        return ResponseEntity.ok(out);
     }
 
     // Delete doctor with given id
